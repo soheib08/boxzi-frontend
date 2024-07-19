@@ -16,5 +16,5 @@ npm run  dev
 
 #### Address: 
 ```sh
-[localhost://5173](http://localhost:5173/)
+http://localhost:5173
 ```
