@@ -1,26 +1,37 @@
 <template>
   <div class="profile">
     <div class="card">
-      <DoctorIcon class="avatar"/>
+      <DoctorIcon class="avatar" />
       <div class="data">
         <div class="profile-content">
           <div>
-            <strong>{{profile.name}}</strong>
-            <a :href="profile.email" class="email">{{profile.email}}</a>
+            <strong>{{ profile.name }}</strong>
+            <a :href="'mailto:' + profile.email" class="email">{{ profile.email }}</a>
           </div>
-          <div class="description">{{profile.description}}</div>
+          <div class="description">{{ profile.description }}</div>
         </div>
         <div class="likes">
           <span class="likes-icon">&#10084;</span>
-          <span class="likes-value">{{profile.likes}}</span>
+          <span class="likes-value">{{ profile.likes }}</span>
         </div>
       </div>
     </div>
     <div class="comment">
-      <input class="comment-input" placeholder="Write your comment...">
+      <input
+        class="comment-input"
+        placeholder="Write your comment..."
+        v-model="newComment"
+        @keyup.enter="submitComment"
+      />
+    </div>
+    <div class="comment-list">
+      <div v-for="(comment, index) in comments" :key="index" class="comment-item">
+        {{ comment }}
+      </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import DoctorIcon from "./DoctorIcon.vue";
@@ -36,6 +47,25 @@ export default {
     profile: {
       type: Object,
       required: true
+    },
+    comments: {
+      type: Array,
+      default: () => []
+    }
+  },
+
+  data() {
+    return {
+      newComment: ""
+    };
+  },
+
+  methods: {
+    submitComment() {
+      if (this.newComment.trim()) {
+        this.$emit("addComment", this.profile.id, this.newComment.trim());
+        this.newComment = "";
+      }
     }
   }
 };
@@ -77,7 +107,7 @@ export default {
 
 .email {
   margin-left: 15px;
-  color: rgb(66,125,157);
+  color: rgb(66, 125, 157);
   font-weight: bold;
 }
 
@@ -86,7 +116,7 @@ export default {
 }
 
 .likes {
-  color: rgb(66,125,157);
+  color: rgb(66, 125, 157);
   margin-top: 10px;
   margin-left: 15px;
 }
@@ -106,4 +136,20 @@ export default {
   padding: 8px;
   border: 0;
 }
+
+.comment-list {
+  width: 100%;
+  background-color: #f9f9f9;
+  border: solid 1px rgb(172, 172, 172);
+  border-radius: 0 0 16px 16px;
+  padding: 10px;
+}
+
+.comment-item {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: blue;
+
+}
+
 </style>

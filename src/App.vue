@@ -15,7 +15,8 @@
         v-for="(profile, index) in profiles"
         :key="index"
         :profile="profile"
-        class="profile"
+        :comments="comments[profile.id] || []"
+        @addComment="addComment"
       />
     </div>
 
@@ -72,21 +73,25 @@ export default {
           description: "Surgeon",
           likes: 53
         }
-      ]
+      ],
+      comments: {}
     };
   },
 
   methods: {
     sortAsc() {
-      this.profiles.sort(function(a, b) {
-        return a.likes - b.likes;
-      });
+      this.profiles.sort((a, b) => a.likes - b.likes);
     },
 
     sortDesc() {
-      this.profiles.sort(function(a, b) {
-        return b.likes - a.likes;
-      });
+      this.profiles.sort((a, b) => b.likes - a.likes);
+    },
+
+    addComment(profileId, comment) {
+      if (!this.comments[profileId]) {
+        this.comments[profileId] = [];
+      }
+      this.comments[profileId].push(comment);
     }
   }
 };
